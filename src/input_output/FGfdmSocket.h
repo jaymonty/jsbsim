@@ -106,7 +106,7 @@ public:
   void Clear(const std::string& s);
   void Close(void);
   bool GetConnectStatus(void) {return connected;}
-  void Wait(void);
+  bool Wait(void);
 
   enum {ptUDP, ptTCP};
 

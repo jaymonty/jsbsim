@@ -48,6 +48,7 @@ INCLUDES
 #include <sstream>
 #include <iomanip>
 #include <cstdlib>
+#include <unistd.h>
 
 using namespace std;
 
@@ -225,7 +226,7 @@ bool FGInput::Run(void)
 
   RunPostFunctions();
 
-  return false;
+  return data.size() > 0;
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -306,8 +307,11 @@ void FGInput::Debug(int from)
 // wait for new input and process it
 void FGInput::Wait(void)
 {
-    socket->Wait();
-    Run();
+    if (socket->Wait()) {
+        if (!Run()) {
+            exit(0);
+        }
+    }
 }
 
 }

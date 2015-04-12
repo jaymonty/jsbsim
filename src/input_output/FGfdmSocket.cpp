@@ -277,15 +277,15 @@ string FGfdmSocket::Receive(void)
   return data;
 }
 
-void FGfdmSocket::Wait(void)
+bool FGfdmSocket::Wait(void)
 {
     fd_set fds;
     if (sckt_in <= 0) {
-        return;
+        return false;
     }
     FD_ZERO(&fds);
     FD_SET(sckt_in, &fds);
-    select(sckt_in+1, &fds, NULL, NULL, NULL);
+    return select(sckt_in+1, &fds, NULL, NULL, NULL) == 1;
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
