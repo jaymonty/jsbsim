@@ -428,6 +428,12 @@ public:
   void ResetToInitialConditions(void);
   /// Sets the debug level.
   void SetDebugLevel(int level) {debug_lvl = level;}
+  /// Wait for some user input
+  void WaitInput(void) {Input->Wait(); }
+  /// Set stepping mode
+  void SetStepping(bool set) {stepping = set;}
+  /// return stepping mode
+  bool Stepping(void) {return stepping;}
 
   struct PropertyCatalogStructure {
     /// Name of the property.
@@ -522,6 +528,7 @@ private:
   double saved_dT;
   double sim_time;
   bool holding;
+  bool stepping;
   bool Constructing;
   bool modelLoaded;
   bool IsChild;

@@ -177,6 +177,13 @@ bool FGInput::Run(void)
       } else if (command == "resume") {             // RESUME
 
         FDMExec->Resume();
+        FDMExec->SetStepping(false);
+        socket->Reply("");
+
+      } else if (command == "step") {               // STEP
+
+        FDMExec->SetStepping(true);
+        FDMExec->IncrTime();
         socket->Reply("");
 
       } else if (command == "quit") {                   // QUIT
@@ -203,6 +210,7 @@ bool FGInput::Run(void)
         "   set {property name} {value}\n"
         "   hold\n"
         "   resume\n"
+        "   step\n"
         "   help\n"
         "   quit\n"
         "   info\n\n");
@@ -294,4 +302,12 @@ void FGInput::Debug(int from)
     }
   }
 }
+
+// wait for new input and process it
+void FGInput::Wait(void)
+{
+    socket->Wait();
+    Run();
+}
+
 }

@@ -62,6 +62,8 @@ INCLUDES
 #include <iostream>
 #include <cstdlib>
 
+#pragma GCC optimize("O0")
+
 using namespace std;
 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -261,6 +263,7 @@ int main(int argc, char* argv[])
   double cycle_duration = 0.0;
   double override_sim_rate_value = 0.0;
   long sleep_nseconds = 0;
+  double last_sim_time = 0;
 
   realtime = false;
   play_nice = false;
@@ -399,11 +402,19 @@ int main(int argc, char* argv[])
 
     FDMExec->ProcessMessage(); // Process messages, if any.
 
-    // if running realtime, throttle the execution, else just run flat-out fast
-    // unless "playing nice", in which case sleep for a while (0.01 seconds) each frame.
-    // If suspended, then don't increment cumulative realtime "stopwatch".
+    if (FDMExec->Stepping()) {
+        // if single stepping then wait for input and run the model
+        // only if time has advanced
+        FDMExec->WaitInput();
+        if (FDMExec->GetSimTime() != last_sim_time) {
+            result = FDMExec->Run();            
+        }
 
-    if ( ! FDMExec->Holding()) {
+    } else if ( ! FDMExec->Holding()) {
+        // if running realtime, throttle the execution, else just run flat-out fast
+        // unless "playing nice", in which case sleep for a while (0.01 seconds) each frame.
+        // If suspended, then don't increment cumulative realtime "stopwatch".
+
       if ( ! realtime ) {         // ------------ RUNNING IN BATCH MODE
 
         result = FDMExec->Run();
@@ -442,6 +453,7 @@ int main(int argc, char* argv[])
       result = FDMExec->Run();
     }
 
+    last_sim_time = FDMExec->GetSimTime();
   }
 
 quit:

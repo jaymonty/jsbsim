@@ -81,6 +81,7 @@ public:
   inline void Enable(void) { enabled = true; }
   inline void Disable(void) { enabled = false; }
   inline bool Toggle(void) {enabled = !enabled; return enabled;}
+  void Wait(void);
   bool Load(Element* el);
 
 private:

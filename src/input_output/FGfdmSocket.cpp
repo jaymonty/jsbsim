@@ -277,6 +277,17 @@ string FGfdmSocket::Receive(void)
   return data;
 }
 
+void FGfdmSocket::Wait(void)
+{
+    fd_set fds;
+    if (sckt_in <= 0) {
+        return;
+    }
+    FD_ZERO(&fds);
+    FD_SET(sckt_in, &fds);
+    select(sckt_in+1, &fds, NULL, NULL, NULL);
+}
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 int FGfdmSocket::Reply(const string& text)
