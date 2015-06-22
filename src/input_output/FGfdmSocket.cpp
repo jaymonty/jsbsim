@@ -72,17 +72,9 @@ FGfdmSocket::FGfdmSocket(const string& address, int port, int protocol)
     else cout << "Winsock DLL not initialized ..." << endl;
   #endif
 
-  if (!is_number(address)) {
     if ((host = gethostbyname(address.c_str())) == NULL) {
-      cout << "Could not get host net address by name..." << endl;
+        cout << "Could not get host net address by name..." << endl;
     }
-  } else {
-    unsigned int ip;
-    ip = inet_addr(address.c_str());
-    if ((host = gethostbyaddr((char*)&ip, address.size(), PF_INET)) == NULL) {
-      cout << "Could not get host net address by number..." << endl;
-    }
-  }
 
   if (host != NULL) {
     if (protocol == ptUDP) {  //use udp protocol
@@ -132,14 +124,8 @@ FGfdmSocket::FGfdmSocket(const string& address, int port)
   cout << "Host name...   " << address << ",  Port...  " << port << "." << endl;
   cout << "Host name... (char)  " << address.c_str() << "." << endl;
 
-  if (!is_number(address)) {
-    if ((host = gethostbyname(address.c_str())) == NULL) {
+  if ((host = gethostbyname(address.c_str())) == NULL) {
       cout << "Could not get host net address by name..." << endl;
-    }
-  } else {
-    if ((host = gethostbyaddr(address.c_str(), address.size(), PF_INET)) == NULL) {
-      cout << "Could not get host net address by number..." << endl;
-    }
   }
 
   if (host != NULL) {
