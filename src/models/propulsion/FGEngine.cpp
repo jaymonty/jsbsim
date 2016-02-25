@@ -91,7 +91,7 @@ FGEngine::FGEngine(FGFDMExec* exec, Element* engine_element, int engine_number)
 
   Name = engine_element->GetAttributeValue("name");
 
-  Load(engine_element, PropertyManager, to_string(EngineNumber)); // Call ModelFunctions loader
+  Load(engine_element, PropertyManager, to_string((long long)EngineNumber)); // Call ModelFunctions loader
 
 // Find and set engine location
 
@@ -148,7 +148,7 @@ FGEngine::FGEngine(FGFDMExec* exec, Element* engine_element, int engine_number)
   property_name = base_property_name + "/fuel-flow-rate-pps";
   PropertyManager->Tie( property_name.c_str(), this, &FGEngine::GetFuelFlowRate);
 
-  PostLoad(engine_element, PropertyManager, to_string(EngineNumber));
+  PostLoad(engine_element, PropertyManager, to_string((long long)EngineNumber));
 
   //cout << "Engine[" << EngineNumber << "] using fuel density: " << FuelDensity << endl;
 
